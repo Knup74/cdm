@@ -31,7 +31,7 @@ export default {
         });
         const token = response.data.token;
         localStorage.setItem('jwt', token); // Store JWT in local storage
-        this.$router.push('/protected'); // Navigate to protected route after login
+        this.$router.push('/home'); // Navigate to protected route after login
       } catch (err) {
         this.error = 'Invalid username or password';
       }

@@ -44,7 +44,21 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-app.get('/api/coproprietaires', (req, res) => {
+app.post('/api/coproprietaire', (req, res) => {
+  const { email } = req.body;
+
+  db.get('SELECT * FROM coproprietaires WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erreur lors de la récupération du copropriétaire' });
+    }
+    if (!row) {
+      return res.status(404).json({ message: 'Copropriétaire non trouvé' });
+    }
+    return res.json(row);
+  });
+});
+
+  app.get('/api/coproprietaires', (req, res) => {
     console.log('Tentative de récupération des copropriétaires'); // Log avant l'appel
     db.all(`SELECT * FROM coproprietaires`, [], (err, rows) => {
       if (err) {
