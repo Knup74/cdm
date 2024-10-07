@@ -7,7 +7,8 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+=> L'appli vue.js: npm run serve
+=> Le back express: node .\Express\server.js
 ```
 
 ### Compiles and minifies for production
