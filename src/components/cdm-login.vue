@@ -1,25 +1,49 @@
 <template>
-  <img alt="Vue logo" src="../assets/logo.png">
-  <div>
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input v-model="email" type="text" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <button type="submit">Login</button>
-    </form>
-    <p v-if="error">{{ error }}</p>
+  <div class="login-container d-flex justify-content-center align-items-center vh-100">
+    <div class="login-box p-4 shadow-lg rounded">
+      <h2 class="text-center mb-4">Connexion</h2>
+      <form @submit.prevent="login">
+        <div class="form-group mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            v-model="email" 
+            class="form-control" 
+            placeholder="Entrez votre email" 
+            required 
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="password" class="form-label">Mot de passe</label>
+          <input 
+            type="password" 
+            id="password" 
+            v-model="password" 
+            class="form-control" 
+            placeholder="Entrez votre mot de passe" 
+            required 
+          />
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+        </div>
+        <div v-if="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from '@/axios';
-
 export default {
   data() {
     return {
       email: '',
       password: '',
-      error: null,
+      errorMessage: null,
     };
   },
   methods: {

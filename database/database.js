@@ -74,7 +74,7 @@ db.serialize(async () => {
 
   // Insertion d'un utilisateur par défaut
   db.run(`INSERT INTO coproprietaires (email, password_hash, tantieme, role) VALUES (?, ?, ?, ?)`,
-    ['admin@example.com', hashedPassword, 100, 'administrateur'], (err) => {
+    ['plf74@msn.com', hashedPassword, 100, 'administrateur'], (err) => {
       if (err) {
         console.error('Erreur lors de l\'insertion de l\'utilisateur par défaut:', err.message);
       } else {

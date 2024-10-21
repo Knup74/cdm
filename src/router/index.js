@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import cdmLogin from '@/components/cdm-login.vue';
 import cdmHome from '@/components/cdm-home.vue';
+import cdmCoproprietaires from '@/components/cdm-coproprietaires.vue';
+import AuthenticatedLayout from '@/components/cdm-layout.vue'; // Le layout commun
+
 
 const routes = [
   {
@@ -8,12 +11,28 @@ const routes = [
     name: 'cdm-login',
     component: cdmLogin,
   },
-  {
-    path: '/home',
-    name: 'cdm-home',
-    component: cdmHome,
-    meta: { requiresAuth: true },  // Indique que cette route nécessite une authentification
-  }
+    {
+      path: '/',
+      component: AuthenticatedLayout, // Layout parent pour les routes protégées
+      meta: { requiresAuth: true },   // Nécessite une authentification
+      children: [
+        {
+        path: '', // Route enfant par défaut
+        redirect: 'home', // Redirige vers /home par défaut
+      },
+      {
+        path: 'home',
+        name: 'cdm-home',
+        component: cdmHome,         // La vue de la route protégée
+      },
+      {
+        path: 'coproprietaires',
+        name: 'cdm-coproprietaires',
+        component: cdmCoproprietaires,         // La vue de la route protégée
+      },
+        // Ajouter d'autres routes enfants ici
+      ],
+    }
 ];
 
 const router = createRouter({
