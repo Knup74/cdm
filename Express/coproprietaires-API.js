@@ -20,12 +20,19 @@ router.get('/', (req, res) => {
 
 // Ajouter un nouveau copropriétaire
 router.post('/',authenticateToken, administrationToken, async (req, res) => {
-  const { nom, prenom, email, tantiemes } = req.body;
+  const { nom, prenom, email, tantieme, role } = req.body;
   try {
-    const sql = 'INSERT INTO coproprietaires (nom, prenom, email, tantieme) VALUES (?, ?, ?, ?)';
-    const params = [nom, prenom, email, password_hash, tantiemes];
+    const sql = 'INSERT INTO coproprietaires (email, nom,prenom,password_hash, tantieme, role) VALUES ( ?, ?, ?, ?, ?, ?)';
+    const params = [email, nom, prenom,'', tantieme, role];
+    console.log(nom);
+    console.log(prenom);
+    console.log(email);
+    console.log(tantieme);
+    console.log(role);
+    console.log(sql);
     db.run(sql, params, function (err) {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: 'Erreur lors de l\'ajout du copropriétaire' });
       }
       res.status(201).json({ id: this.lastID });
