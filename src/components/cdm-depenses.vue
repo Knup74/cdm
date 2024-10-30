@@ -85,10 +85,10 @@
       },
       async addDepense() {
         try {
-            const token = localStorage.getItem('jwt');
-            const response = await axios.get('http://localhost:3000/api/depenses', this.newDepense, {
+          const token = localStorage.getItem('jwt');
+          const response = await axios.post('http://localhost:3000/api/depenses', this.newDepense, {
             headers: { Authorization: `Bearer ${token}` }
-            });
+          });
           this.depenses.push({ ...response.data, editing: false });
           this.newDepense.description = '';
           this.newDepense.montant = 0;
@@ -130,32 +130,8 @@
   };
   </script>
   
-  <style scoped>
-  /* Styles pour le formulaire et la table */
-  .depenses {
-    margin: 20px;
-  }
   
-  form {
-    margin-bottom: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  button {
-    margin: 0 5px;
-  }
-  </style>
+<style scoped>
+@import "@/assets/depenses.scss";
+</style>
   

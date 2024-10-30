@@ -19,9 +19,10 @@ router.get('/', authenticateToken, (req, res) => {
 
 // Ajouter une nouvelle dépense
 router.post('/', authenticateToken, administrationToken, (req, res) => {
-  const { description, montant, date, copropriete_id } = req.body;
-  const sql = 'INSERT INTO depenses (description, montant, date, copropriete_id) VALUES (?, ?, ?, ?)';
-  const params = [description, montant, date, copropriete_id];
+  const { description, montant } = req.body;
+  const date = new Date().toISOString();
+  const sql = 'INSERT INTO depenses (description, montant, date) VALUES (?, ?, ?)';
+  const params = [description, montant, date];
 
   db.run(sql, params, function (err) {
     if (err) {
