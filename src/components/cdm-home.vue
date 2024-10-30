@@ -21,8 +21,8 @@
       <tbody>
         <tr v-for="depense in depenses" :key="depense.id">
           <td>{{ depense.description }}</td>
-          <td>{{ depense.montant_total }} €</td>
-          <td>{{ calculerPart(depense.montant_total) }} €</td>
+          <td>{{ depense.montant }} €</td>
+          <td>{{ calculerPart(depense.montant) }} €</td>
         </tr>
       </tbody>
     </table>
@@ -91,3 +91,7 @@ export default {
 };
 </script>
 1
+
+<style scoped>
+  @import "@/assets/home.scss";
+</style>

@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@types/jwt-decode": "^2.2.1",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
@@ -15,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "sass-loader": "^16.0.2",
     "sqlite3": "^5.1.7",
     "vue": "^3.2.13",

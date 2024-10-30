@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'your-secret-key';
 
 // Middleware pour vérifier si l'utilisateur est administrateur
-function authorizeAdmin(req, res, next) {
-  if (req.user.role !== 'admin') {
+function administrationToken(req, res, next) {  
+  console.log(req.user.role);
+  if (req.user.role !== 'administrateur') {
     return res.status(403).json({ message: 'Accès interdit : rôle administrateur requis' });
   }
   next();
 }
 
-module.exports = authenticateToken;
+module.exports = administrationToken;

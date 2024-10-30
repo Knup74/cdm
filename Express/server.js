@@ -4,11 +4,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const db = require('../database/database.js');
-const authenticateToken = require('./middleware/auth'); 
-const authorizeAdmin = require('./middleware/auth-admin.js');  
 
 // Importer le routeur des copropriétaires
 const coproprietairesRoutes = require('./coproprietaires-API.js');
+const depensesAPI = require('./depenses-API');
 
 const app = express();
 const PORT = 3000;
@@ -54,20 +53,8 @@ app.post('/api/coproprietaire', (req, res) => {
 // Utiliser le routeur pour les routes copropriétaires
 app.use('/api/coproprietaires', coproprietairesRoutes);
 
-// Endpoint pour récupérer les dépenses
-app.get('/api/depenses', authenticateToken, (req, res) => {
-  const email = req.user.email;
-  db.all(
-    `SELECT d.id, d.description, d.montant_total 
-     FROM depenses d
-     JOIN coproprietaires c ON d.copropriete_id = c.copropriete_id
-     WHERE c.email = ?`,
-    [email],
-    (err, rows) => {
-      if (err) return res.status(500).json({ message: 'Erreur lors de la récupération des dépenses' });
-      res.json(rows);
-    }
-  );
-});
+// Utiliser le routeur pour les routes depenses
+app.use('/api/depenses', depensesAPI);
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

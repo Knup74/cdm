@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../database/database.js');
 const bcrypt = require('bcrypt');
 const authenticateToken = require('./middleware/auth');  
-const authorizeAdmin = require('./middleware/auth-admin.js');  
+const administrationToken = require('./middleware/auth-admin.js');  
 
 // Récupérer tous les copropriétaires
 router.get('/', (req, res) => {
@@ -19,12 +19,11 @@ router.get('/', (req, res) => {
 });
 
 // Ajouter un nouveau copropriétaire
-router.post('/',authenticateToken, authorizeAdmin, async (req, res) => {
-  const { nom, email, password, tantiemes } = req.body;
+router.post('/',authenticateToken, administrationToken, async (req, res) => {
+  const { nom, prenom, email, tantiemes } = req.body;
   try {
-    const password_hash = await bcrypt.hash(password, 10);
-    const sql = 'INSERT INTO coproprietaires (nom, email, password_hash, tantiemes) VALUES (?, ?, ?, ?)';
-    const params = [nom, email, password_hash, tantiemes];
+    const sql = 'INSERT INTO coproprietaires (nom, prenom, email, tantieme) VALUES (?, ?, ?, ?)';
+    const params = [nom, prenom, email, password_hash, tantiemes];
     db.run(sql, params, function (err) {
       if (err) {
         return res.status(500).json({ message: 'Erreur lors de l\'ajout du copropriétaire' });
@@ -37,14 +36,15 @@ router.post('/',authenticateToken, authorizeAdmin, async (req, res) => {
 });
 
 // Mettre à jour un copropriétaire
-router.put('/:id',authenticateToken, authorizeAdmin, (req, res) => {
-  const { nom, email, tantiemes } = req.body;
+router.put('/:id',authenticateToken, administrationToken, (req, res) => {
+  const { nom, prenom, email, tantieme, role } = req.body;
   const id = req.params.id;
   db.run(
-    'UPDATE coproprietaires SET nom = ?, email = ?, tantiemes = ? WHERE id = ?',
-    [nom, email, tantiemes, id],
+    'UPDATE coproprietaires SET nom = ?, prenom = ?, email = ?, tantieme = ?, role = ? WHERE id = ?',
+    [nom, prenom, email, tantieme, role, id],
     function (err) {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: 'Erreur lors de la mise à jour du copropriétaire' });
       }
       res.json({ message: 'Copropriétaire mis à jour avec succès' });
@@ -53,7 +53,7 @@ router.put('/:id',authenticateToken, authorizeAdmin, (req, res) => {
 });
 
 // Supprimer un copropriétaire
-router.delete('/:id',authenticateToken, authorizeAdmin, (req, res) => {
+router.delete('/:id',authenticateToken, administrationToken, (req, res) => {
   const id = req.params.id;
   db.run('DELETE FROM coproprietaires WHERE id = ?', id, function (err) {
     if (err) {

@@ -1,39 +1,65 @@
-
-
 .login-container {
-    background-color: #f8f9fa;
-  }
-  
-  .login-box {
-    width: 100%;
-    max-width: 400px;
-    background-color: #ffffff;
-    border-radius: 10px;
-  }
-  
-  .login-box h2 {
-    font-family: 'Helvetica', sans-serif;
-    font-weight: 700;
+  background-color: #f8f9fa;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
     color: #343a40;
   }
-  
-  .login-box .form-control {
+
+  .form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
     border-radius: 5px;
   }
-  
-  .login-box .btn {
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .login-box .btn:hover {
+}
+
+.btn {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
     background-color: #0056b3;
   }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
-  
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.5rem;
+  border-radius: 5px;
+}

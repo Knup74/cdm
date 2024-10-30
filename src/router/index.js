@@ -2,8 +2,21 @@ import { createRouter, createWebHistory } from 'vue-router';
 import cdmLogin from '@/components/cdm-login.vue';
 import cdmHome from '@/components/cdm-home.vue';
 import cdmCoproprietaires from '@/components/cdm-coproprietaires.vue';
-import AuthenticatedLayout from '@/components/cdm-layout.vue'; // Le layout commun
+import cdmDepenses from '@/components/cdm-depenses.vue';
+import AuthenticatedLayout from '@/components/cdm-layout.vue';
 
+function decodeToken(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
+  );
+
+  return JSON.parse(jsonPayload);
+}
 
 const routes = [
   {
@@ -11,28 +24,34 @@ const routes = [
     name: 'cdm-login',
     component: cdmLogin,
   },
-    {
-      path: '/',
-      component: AuthenticatedLayout, // Layout parent pour les routes protégées
-      meta: { requiresAuth: true },   // Nécessite une authentification
-      children: [
-        {
-        path: '', // Route enfant par défaut
-        redirect: 'home', // Redirige vers /home par défaut
+  {
+    path: '/',
+    component: AuthenticatedLayout,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        redirect: 'home',
       },
       {
         path: 'home',
         name: 'cdm-home',
-        component: cdmHome,         // La vue de la route protégée
+        component: cdmHome,
       },
       {
-        path: 'coproprietaires',
+        path: '/admin/coproprietaires',
         name: 'cdm-coproprietaires',
-        component: cdmCoproprietaires,         // La vue de la route protégée
+        component: cdmCoproprietaires,
+        meta: { requiresAdmin: true },
       },
-        // Ajouter d'autres routes enfants ici
-      ],
-    }
+      {
+        path: '/admin/depenses',
+        name: 'cdm-depenses',
+        component: cdmDepenses,
+        meta: { requiresAdmin: true },
+      },
+    ],
+  }
 ];
 
 const router = createRouter({
@@ -44,43 +63,38 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   console.log('Navigating to:', to.fullPath);
   
-  // Si la route nécessite une authentification
+  const token = localStorage.getItem('jwt');
+  
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log('Cette route nécessite une authentification');
-    const token = localStorage.getItem('jwt');
-    
     if (token) {
-      console.log('Token trouvé:', token);
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));  // Décoder le payload du JWT
-        console.log('Payload décodé:', payload);
-        const isExpired = payload.exp * 1000 < Date.now();  // Vérifier si le token a expiré
-        console.log('Le token est-il expiré?', isExpired);
-        
+        const payload = decodeToken(token);
+        const isExpired = payload.exp * 1000 < Date.now();
+
         if (isExpired) {
           console.log('Token expiré, redirection vers la page de login');
-          localStorage.removeItem('token');  // Supprimer le token expiré
-          next({ name: 'cdm-login' });  // Rediriger vers la page de login
+          localStorage.removeItem('jwt');
+          next({ name: 'cdm-login' });
         } else {
-          console.log('Token valide, accès autorisé');
-          next();  // Le token est valide, autoriser l'accès
+          if (to.matched.some(record => record.meta.requiresAdmin) && payload.role !== 'administrateur') {
+            console.log('Accès refusé : rôle administrateur requis');
+            next({ name: 'cdm-home' });
+          } else {
+            next();
+          }
         }
       } catch (error) {
         console.error('Erreur lors du décodage du token:', error);
-        localStorage.removeItem('token');  // En cas d'erreur, supprimer le token
+        localStorage.removeItem('jwt');
         next({ name: 'cdm-login' });
       }
     } else {
       console.log('Aucun token trouvé, redirection vers la page de login');
-      // Si aucun token JWT n'est présent, rediriger vers la page de connexion
-      next({ name: 'cdm-login' });  // Rediriger vers la page de login
+      next({ name: 'cdm-login' });
     }
   } else {
-    console.log('Cette route ne nécessite pas d\'authentification');
-    next(); // Si la route n'a pas besoin d'authentification, continuer
+    next();
   }
 });
-
-
 
 export default router;

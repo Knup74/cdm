@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 
-const db = new sqlite3.Database('./copropriete.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+const db = new sqlite3.Database('copropriete.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) {
     console.error('Erreur lors de la connexion à la base de données:', err.message);
   } else {
@@ -14,6 +14,8 @@ db.serialize(async () => {
   db.run(`CREATE TABLE IF NOT EXISTS coproprietaires (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
+    nom TEXT,
+    prenom TEXT,
     password_hash TEXT,
     tantieme INTEGER,
     role TEXT DEFAULT 'utilisateur'
@@ -73,8 +75,8 @@ db.serialize(async () => {
   const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
   // Insertion d'un utilisateur par défaut
-  db.run(`INSERT INTO coproprietaires (email, password_hash, tantieme, role) VALUES (?, ?, ?, ?)`,
-    ['plf74@msn.com', hashedPassword, 100, 'administrateur'], (err) => {
+  db.run(`INSERT INTO coproprietaires (email, nom,prenom,password_hash, tantieme, role) VALUES (?, ?, ?, ?, ?, ?)`,
+    ['plf74@msn.com', 'Ferrer','Pierre-Louis', hashedPassword, 100, 'administrateur'], (err) => {
       if (err) {
         console.error('Erreur lors de l\'insertion de l\'utilisateur par défaut:', err.message);
       } else {

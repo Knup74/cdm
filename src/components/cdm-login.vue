@@ -1,7 +1,11 @@
 <template>
   <div class="login-container d-flex justify-content-center align-items-center vh-100">
     <div class="login-box p-4 shadow-lg rounded">
+      <!-- Ajout du logo -->
+      <img src="@/assets/logo.jpg" alt="Logo Copro des Moulins" class="logo mb-3">
+      
       <h2 class="text-center mb-4">Connexion</h2>
+      
       <form @submit.prevent="login">
         <div class="form-group mb-3">
           <label for="email" class="form-label">Email</label>
@@ -14,6 +18,7 @@
             required 
           />
         </div>
+        
         <div class="form-group mb-4">
           <label for="password" class="form-label">Mot de passe</label>
           <input 
@@ -25,9 +30,11 @@
             required 
           />
         </div>
+        
         <div class="text-center">
           <button type="submit" class="btn btn-primary w-100">Se connecter</button>
         </div>
+        
         <div v-if="errorMessage" class="alert alert-danger mt-3">
           {{ errorMessage }}
         </div>
@@ -38,6 +45,7 @@
 
 <script>
 import axios from '@/axios';
+
 export default {
   data() {
     return {
@@ -54,12 +62,16 @@ export default {
           password: this.password,
         });
         const token = response.data.token;
-        localStorage.setItem('jwt', token); // Store JWT in local storage
-        this.$router.push('/home'); // Navigate to protected route after login
+        localStorage.setItem('jwt', token); // Stockage du JWT dans localStorage
+        this.$router.push('/home'); // Redirection vers la page d'accueil après connexion
       } catch (err) {
-        this.error = 'Invalid username or password';
+        this.errorMessage = 'Email ou mot de passe invalide';
       }
     },
   },
 };
 </script>
+
+<style scoped lang="scss">
+  @import "@/assets/login.scss";
+</style>
