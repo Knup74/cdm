@@ -37,5 +37,5 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
-        rsync -avz dist/ user@your-server-ip:/var/www/copro # Modifier le chemin cible selon votre configuration
+        ssh-keyscan -H 194.164.50.7 >> ~/.ssh/known_hosts
+        rsync -avz dist/ sysadmin@194.164.50.7:/var/www/copro # Modifier le chemin cible selon votre configuration
