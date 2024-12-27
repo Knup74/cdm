@@ -1,0 +1,41 @@
+name: Deploy to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - master  # Déclencher sur des pushs dans la branche principale
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Étape 1 : Cloner le dépôt
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Étape 2 : Installer Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18 # Utilisez la version compatible avec votre projet
+        cache: "npm"
+
+    # Étape 3 : Installer les dépendances
+    - name: Install dependencies
+      run: npm install
+
+    # Étape 4 : Construire l'application Vue.js
+    - name: Build Vue.js application
+      run: npm run build
+
+    # Étape 5 : Copier les fichiers sur le serveur
+    - name: Deploy to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
+        rsync -avz dist/ user@your-server-ip:/var/www/copro # Modifier le chemin cible selon votre configuration
