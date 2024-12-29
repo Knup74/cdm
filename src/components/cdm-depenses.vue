@@ -72,7 +72,7 @@
       async fetchDepenses() {
         try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get('http://localhost:3000/api/depenses', {
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/depenses`, {
           headers: { Authorization: `Bearer ${token}` }
         });
           this.depenses = response.data.map(depense => ({
@@ -86,7 +86,7 @@
       async addDepense() {
         try {
           const token = localStorage.getItem('jwt');
-          const response = await axios.post('http://localhost:3000/api/depenses', this.newDepense, {
+          const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/depenses`, this.newDepense, {
             headers: { Authorization: `Bearer ${token}` }
           });
           this.depenses.push({ ...response.data, editing: false });
@@ -105,7 +105,7 @@
       async updateDepense(depense) {
         try {            
           const token = localStorage.getItem('jwt');
-          await axios.put(`http://localhost:3000/api/depenses/${depense.id}`, {
+          await axios.put(`${process.env.VUE_APP_API_BASE_URL}/depenses/${depense.id}`, {
             description: depense.description,
             montant: depense.montant,
           }, {
@@ -118,7 +118,7 @@
       async deleteDepense(id) {
         try {
             const token = localStorage.getItem('jwt');
-          await axios.delete(`http://localhost:3000/api/depenses/${id}`, {
+          await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/depenses/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
             });
           this.depenses = this.depenses.filter(depense => depense.id !== id);

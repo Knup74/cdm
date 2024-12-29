@@ -85,7 +85,7 @@ export default {
   methods: {
     async getCoproprietaires() {
       try {
-        const response = await axios.get('http://localhost:3000/api/coproprietaires');
+        const response = await axios.get('process.env.VUE_APP_API_BASE_URL');
         this.coproprietaires = response.data;
       } catch (error) {
         console.error('Erreur lors de la récupération des copropriétaires', error);
@@ -94,7 +94,7 @@ export default {
     async addCoproprietaire() {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.post('http://localhost:3000/api/coproprietaires', this.newCoproprietaire, {
+        const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/coproprietaires`, this.newCoproprietaire, {
           headers: { Authorization: `Bearer ${token}` }
         });
         this.coproprietaires.push(response.data);
@@ -106,7 +106,7 @@ export default {
     async deleteCoproprietaire(id) {
       try {
         const token = localStorage.getItem('jwt');
-        await axios.delete(`http://localhost:3000/api/coproprietaires/${id}`, {
+        await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/coproprietaires/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         this.coproprietaires = this.coproprietaires.filter(c => c.id !== id);
@@ -122,7 +122,7 @@ export default {
       try {
         const token = localStorage.getItem('jwt');
         const response = await axios.put(
-          `http://localhost:3000/api/coproprietaires/${this.newCoproprietaire.id}`,
+          `${process.env.VUE_APP_API_BASE_URL}/coproprietaires/${this.newCoproprietaire.id}`,
           this.newCoproprietaire,
           {
             headers: { Authorization: `Bearer ${token}` }

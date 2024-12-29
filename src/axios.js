@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Crée une instance d'axios
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api', // Remplacez ceci si nécessaire
+    baseURL: process.env.VUE_APP_API_BASE_URL, // Remplacez ceci si nécessaire
   });
   
 

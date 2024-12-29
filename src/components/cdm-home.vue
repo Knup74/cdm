@@ -57,7 +57,7 @@ export default {
         const email = payload.email;
 
         const response = await axios.post(
-          'http://localhost:3000/api/coproprietaire', 
+          `${process.env.VUE_APP_API_BASE_URL}/coproprietaire`, 
           { email },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -71,7 +71,7 @@ export default {
     async getDepenses() {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get('http://localhost:3000/api/depenses', {
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/depenses`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
