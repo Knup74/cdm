@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 
-const db = new sqlite3.Database('./database/copropriete.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+const db = new sqlite3.Database(`process.env.VUE_APP_BDD_BASE_PATH`, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) {
     console.error('Erreur lors de la connexion à la base de données:', err.message);
   } else {
